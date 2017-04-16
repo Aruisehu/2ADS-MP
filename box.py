@@ -13,6 +13,12 @@ class Box:
     def get_height(self):
         return self.__height
 
+    def get_length(self):
+        return self.__length
+
+    def get_width(self):
+        return self.__width
+
     def rotate(self):
         mem = self.__height
         self.__height = self.__width
@@ -24,11 +30,13 @@ class Box:
         w = self.__width 
         l = self.__length
         return min(h*w, h*l, l*w)
+
+    def __lt__(self, other):
+        return (self.__length < other.get_length()) and (self.__width < other.get_width())
         
 
 if __name__ == "__main__":
     b = Box([10, 20, 30])
-    print(b.dimensions())
     print(b.surface())
     print(b.get_height())
     b.rotate()
