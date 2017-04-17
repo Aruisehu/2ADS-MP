@@ -10,6 +10,9 @@ class Box:
     def surface(self):
         return self.__width * self.__length
 
+    def volume(self):
+        return self.surface() * self.__height
+
     def get_height(self):
         return self.__height
 
@@ -33,6 +36,9 @@ class Box:
 
     def __lt__(self, other):
         return (self.__length < other.get_length()) and (self.__width < other.get_width())
+    
+    def __repr__(self):
+        return "{}\n".format(self.dimensions())
         
 
 if __name__ == "__main__":
