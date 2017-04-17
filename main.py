@@ -8,8 +8,13 @@ def read_box_file(path):
         dimensions = list(map(lambda x: int(x), line.split(" ")))
         boxes.append(Box(dimensions))
     return boxes
-        
 
+def get_key(box):
+    return box.volume()
+        
+def sort_boxes(boxes):
+    result = sorted(boxes, key = get_key, reverse=True)
+    return result
 
 def global_min_surface(boxes):
     #Retourne la surface minimum de toutes les boites données
@@ -17,17 +22,17 @@ def global_min_surface(boxes):
 
 def naive_recursion(boxes, top_box, height, min_surface):
     #top_surface représente la surface de la boite du haut de la pile
-    if (top_box.surface() == min_surface):
-        return height
+    if top_box != None:
+        if (top_box.surface() == min_surface):
+            return height
     surfaces = []
     for box in boxes:
         for i in range(3):
-            if box < top_box:
+            if top_box == None or box < top_box:
                 h = box.get_height()
                 surfaces.append(naive_recursion(boxes, box, height + h, min_surface))
             box.rotate()
     return max(surfaces) if len(surfaces) != 0 else height
-
 
 
 #boxes = read_box_file("boxes.txt")
@@ -35,7 +40,9 @@ boxes = []
 boxes.append(Box([10, 20, 30]))
 boxes.append(Box([5, 10, 50]))
 boxes.append(Box([100, 20, 1]))
-print(naive_recursion(boxes, Box([1000,1000,1000]), 0, global_min_surface(boxes)))
+sorted_boxes = sort_boxes(boxes)
+print(sorted_boxes)
+print(naive_recursion(boxes, None, 0, global_min_surface(boxes)))
 
 
 
