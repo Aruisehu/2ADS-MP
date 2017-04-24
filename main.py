@@ -20,17 +20,22 @@ def global_min_surface(boxes):
     #Retourne la surface minimum de toutes les boites données
     return min(list(map(lambda box: box.min_surface(), boxes)))
 
+def greedy_method(boxes):
+
+
 def naive_recursion(boxes, top_box, height, min_surface):
-    #top_surface représente la surface de la boite du haut de la pile
-    if top_box != None:
+    #top_box représente la boite en haut de la pile
+    if top_box != None: #Au départ il n'y a pas de boite
         if (top_box.surface() == min_surface):
             return height
     surfaces = []
     for box in boxes:
         for i in range(3):
-            if top_box == None or box < top_box:
-                h = box.get_height()
-                surfaces.append(naive_recursion(boxes, box, height + h, min_surface))
+            for j in range(2):
+                if top_box == None or box < top_box:
+                    h = box.get_height()
+                    surfaces.append(naive_recursion(boxes, box, height + h, min_surface))
+                box.base_rotate()
             box.rotate()
     return max(surfaces) if len(surfaces) != 0 else height
 

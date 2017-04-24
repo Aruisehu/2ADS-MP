@@ -27,6 +27,9 @@ class Box:
         self.__height = self.__width
         self.__width = self.__length
         self.__length = mem
+
+    def base_rotate(self):
+        self.__width, self.__length =  self.__length, self.__width
     
     def min_surface(self):
         h = self.__height 
