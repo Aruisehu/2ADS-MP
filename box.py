@@ -1,8 +1,6 @@
 class Box:
     def __init__(self, dimensions):
-        self.__height = dimensions[0]
-        self.__width = dimensions[1]
-        self.__length = dimensions[2]
+        self.__set_dimensions(dimensions)
 
     def dimensions(self):
         return [self.__height, self.__width, self.__length]
@@ -22,6 +20,11 @@ class Box:
     def get_width(self):
         return self.__width
 
+    def __set_dimensions(self, dims):
+        self.__height = dims[0]
+        self.__width = dims[1]
+        self.__length = dims[2]
+
     def rotate(self):
         mem = self.__height
         self.__height = self.__width
@@ -30,7 +33,17 @@ class Box:
 
     def base_rotate(self):
         self.__width, self.__length =  self.__length, self.__width
-    
+
+    def set_max_height_state(self):
+        max_height = 0
+        for i in range(3):
+            if max_height < self.__height :
+                max_height = self.__height
+                dimensions = self.dimensions()
+            self.rotate()
+        self.__set_dimensions(dimensions)
+
+
     def min_surface(self):
         h = self.__height 
         w = self.__width 
