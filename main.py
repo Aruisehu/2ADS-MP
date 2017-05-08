@@ -1,4 +1,5 @@
 from box import *
+from copy import deepcopy
 """
     Projet fait par Yohann Jolain et Sébastien Erfani
     Tous les algorithmes demandés parte du principe que la liste de boite est triée
@@ -35,13 +36,12 @@ def greedy_method(boxes):
     height = 0
     for box in boxes:
         for i in range(2):
-            box.set_max_height_state()
             if (base == None) or (box < base):
                 base = box
                 tower.append(box)
                 height += box.get_height()
             box.base_rotate()
-    return height, tower
+    return height
         
 def naive_recursion(boxes, top_box, height):
     #top_box représente la boite en haut de la pile
@@ -55,16 +55,33 @@ def naive_recursion(boxes, top_box, height):
     return max(heights) if len(heights) != 0 else height
 
 def bottom_up(boxes):
-    base = None
+    track = [0] * len(boxes) # Stock height
+    keep = [-1] * len(boxes)
+    boxes.reverse()
+    for i in range(len(boxes)):
+        track[i] = boxes[i].get_height()
+        for j in range(len(boxes)):
+            if boxes[j] < boxes[i]:
+                if track[j] + boxes[i].get_height() > track[i]:
+                    track[i] = track[j] + boxes[i].get_height()
+                    keep[i] = j
+    max_height = max(track)
+    x = track.index(max_height)
+    tower = []
+    while x != -1:
+        tower.append(boxes[x])
+        x = keep[x]
+    return max_height, tower
 
 
-#boxes = read_box_file("boxes.txt")
-boxes = []
+boxes = read_box_file("boxes.txt")
+"""boxes = []
 boxes.append(Box([10, 20, 30]))
 boxes.append(Box([5, 10, 50]))
-boxes.append(Box([100, 20, 1]))
+boxes.append(Box([100, 20, 1]))"""
 all_boxes = generate_all_boxes(boxes)
 sorted_boxes = sort_boxes(all_boxes)
-print(naive_recursion(sorted_boxes, None, 0))
-print(greedy_method(sorted_boxes))
+print(bottom_up(deepcopy(sorted_boxes)))
+print(greedy_method(deepcopy(sorted_boxes)))
+#print(naive_recursion(deepcopy(sorted_boxes), None, 0))
 
