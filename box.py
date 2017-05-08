@@ -8,9 +8,6 @@ class Box:
     def surface(self):
         return self.__width * self.__length
 
-    def volume(self):
-        return self.surface() * self.__height
-
     def get_height(self):
         return self.__height
 
@@ -30,6 +27,7 @@ class Box:
         self.__height = self.__width
         self.__width = self.__length
         self.__length = mem
+        return Box(self.dimensions())
 
     def base_rotate(self):
         self.__width, self.__length =  self.__length, self.__width
