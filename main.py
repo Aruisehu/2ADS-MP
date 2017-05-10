@@ -28,7 +28,7 @@ def sort_boxes(boxes):
     return result
 
 def greedy_method(boxes):
-    # On part du principe simple que la boite avec le plus 
+    # On part du principe simple que la boite avec le plus
     # grand volume est celle qui pourra avoir le plus de boite sur elle
     # Tout en maximisant la hauteur
     base = None # On a pas de boite qui compose la pile au début
@@ -42,7 +42,7 @@ def greedy_method(boxes):
                 height += box.get_height()
             box.base_rotate()
     return height
-        
+
 def naive_recursion(boxes, top_box, height):
     #top_box représente la boite en haut de la pile
     heights = []
@@ -74,15 +74,40 @@ def bottom_up(boxes):
         x = keep[x]
     return max_height, tower
 
+def top_down(boxes, saved_heights, top_box, height):
+    #top_box représente la boite en haut de la pile
+    heights = []
+    if top_box != None:
+        if saved_heights[top_box] != -1:
+            return saved_heights[top_box]
+
+    for i in range(len(boxes)):
+        for j in range(2):
+            if top_box == None or boxes[i] < boxes[top_box]:
+                h = boxes[i].get_height()
+                heights.append(top_down(boxes, saved_heights, i, height + h))
+            boxes[i].base_rotate()
+
+    if len(heights) != 0 and top_box != None:
+        saved_heights[top_box] = max(heights)
+        return saved_heights[top_box]
+    else:
+        if top_box == None:
+            return max(saved_heights)
+        else:
+            saved_heights[top_box] = height
+            return height
 
 #boxes = read_box_file("boxes.txt")
-boxes = []
+boxes = [] # La réponse devrait être 121
 boxes.append(Box([10, 20, 30]))
 boxes.append(Box([5, 10, 50]))
 boxes.append(Box([100, 20, 1]))
 all_boxes = generate_all_boxes(boxes)
 sorted_boxes = sort_boxes(all_boxes)
-print(bottom_up(deepcopy(sorted_boxes)))
-print(greedy_method(deepcopy(sorted_boxes)))
-print(naive_recursion(deepcopy(sorted_boxes), None, 0))
+print(bottom_up(deepcopy(sorted_boxes))[0])
 
+saved_heights = [-1] * len(sorted_boxes)
+print(top_down(deepcopy(sorted_boxes), saved_heights, None, 0))
+#print(greedy_method(deepcopy(sorted_boxes)))
+#print(naive_recursion(deepcopy(sorted_boxes), None, 0))

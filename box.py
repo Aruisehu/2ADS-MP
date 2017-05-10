@@ -35,7 +35,7 @@ class Box:
     def set_max_height_state(self):
         max_height = 0
         for i in range(3):
-            if max_height < self.__height :
+            if max_height < self.__height:
                 max_height = self.__height
                 dimensions = self.dimensions()
             self.rotate()
@@ -43,17 +43,17 @@ class Box:
 
 
     def min_surface(self):
-        h = self.__height 
-        w = self.__width 
+        h = self.__height
+        w = self.__width
         l = self.__length
         return min(h*w, h*l, l*w)
 
     def __lt__(self, other):
         return (self.__length < other.get_length()) and (self.__width < other.get_width())
-    
+
     def __repr__(self):
         return "{}\n".format(self.dimensions())
-        
+
 
 if __name__ == "__main__":
     b = Box([10, 20, 30])
