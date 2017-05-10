@@ -76,27 +76,26 @@ def bottom_up(boxes):
 
 def top_down(boxes, saved_heights, top_box, height):
     #top_box représente la boite en haut de la pile
-    heights = []
-    if top_box != None:
-        if saved_heights[top_box] != -1:
-            return saved_heights[top_box]
+    top_box = 0 if top_box == None else top_box + 1
+    if saved_heights[top_box] != -1:
+        return saved_heights[top_box]
 
-    for i in range(len(boxes)):
+    last = True
+
+    for i in range(top_box, len(boxes)):
         for j in range(2):
-            if top_box == None or boxes[i] < boxes[top_box]:
+            if top_box == 0 or boxes[i] < boxes[top_box - 1]:
                 h = boxes[i].get_height()
-                heights.append(top_down(boxes, saved_heights, i, height + h))
+                saved_heights[top_box] = max(saved_heights[top_box], top_down(boxes, saved_heights, i, height + h))
+                last = False
             boxes[i].base_rotate()
 
-    if len(heights) != 0 and top_box != None:
-        saved_heights[top_box] = max(heights)
+    if top_box != 0:
+        if last:
+            saved_heights[top_box] = boxes[top_box - 1].get_height()
         return saved_heights[top_box]
     else:
-        if top_box == None:
-            return max(saved_heights)
-        else:
-            saved_heights[top_box] = height
-            return height
+        return max(saved_heights)
 
 #boxes = read_box_file("boxes.txt")
 boxes = [] # La réponse devrait être 121
@@ -105,9 +104,11 @@ boxes.append(Box([5, 10, 50]))
 boxes.append(Box([100, 20, 1]))
 all_boxes = generate_all_boxes(boxes)
 sorted_boxes = sort_boxes(all_boxes)
-print(bottom_up(deepcopy(sorted_boxes))[0])
 
-saved_heights = [-1] * len(sorted_boxes)
+#print(bottom_up(deepcopy(sorted_boxes))[0])
+
+saved_heights = [-1] * (len(sorted_boxes) + 1)
 print(top_down(deepcopy(sorted_boxes), saved_heights, None, 0))
 #print(greedy_method(deepcopy(sorted_boxes)))
+
 #print(naive_recursion(deepcopy(sorted_boxes), None, 0))
