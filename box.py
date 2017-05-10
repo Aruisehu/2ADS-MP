@@ -23,14 +23,11 @@ class Box:
         self.__length = dims[2]
 
     def rotate(self):
-        mem = self.__height
-        self.__height = self.__width
-        self.__width = self.__length
-        self.__length = mem
-        return Box(self.dimensions())
+        return Box([self.__width, self.__length, self.__height])
 
     def base_rotate(self):
-        self.__width, self.__length =  self.__length, self.__width
+        return Box([self.__height, self.__length, self.__width])
+
 
     def set_max_height_state(self):
         max_height = 0

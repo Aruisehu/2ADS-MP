@@ -19,7 +19,9 @@ def generate_all_boxes(boxes):
     all_boxes = []
     for box in boxes:
         for i in range(3):
-            all_boxes.append(box)
+            for j in range(2): 
+                all_boxes.append(box)
+                box = box.base_rotate()
             box = box.rotate()
     return all_boxes
 
@@ -35,12 +37,10 @@ def greedy_method(boxes):
     tower = []
     height = 0
     for box in boxes:
-        for i in range(2):
-            if (base == None) or (box < base):
-                base = box
-                tower.append(box)
-                height += box.get_height()
-            box.base_rotate()
+        if (base == None) or (box < base):
+            base = box
+            tower.append(box)
+            height += box.get_height()
     return height
 
 def naive_recursion(boxes, top_box, height):
@@ -48,11 +48,9 @@ def naive_recursion(boxes, top_box, height):
     heights = []
     start = top_box if top_box != None else 0
     for i in range(start, len(boxes)):
-        for j in range(2):
-            if top_box == None or boxes[i] < boxes[top_box]:
-                h = boxes[i].get_height()
-                heights.append(naive_recursion(boxes, i, height + h))
-            boxes[i].base_rotate()
+        if top_box == None or boxes[i] < boxes[top_box]:
+            h = boxes[i].get_height()
+            heights.append(naive_recursion(boxes, i, height + h))
     return max(heights) if len(heights) != 0 else height
 
 def bottom_up(boxes):
@@ -83,12 +81,10 @@ def top_down(boxes, saved_heights, top_box, height):
     last = True
 
     for i in range(top_box, len(boxes)):
-        for j in range(2):
-            if top_box == 0 or boxes[i] < boxes[top_box - 1]:
-                h = boxes[i].get_height()
-                saved_heights[top_box] = max(saved_heights[top_box], top_down(boxes, saved_heights, i, height + h))
-                last = False
-            boxes[i].base_rotate()
+        if top_box == 0 or boxes[i] < boxes[top_box - 1]:
+            h = boxes[i].get_height()
+            saved_heights[top_box] = max(saved_heights[top_box], top_down(boxes, saved_heights, i, height + h))
+            last = False
 
     if top_box != 0:
         if last:
@@ -104,7 +100,6 @@ boxes.append(Box([5, 10, 50]))
 boxes.append(Box([100, 20, 1]))
 all_boxes = generate_all_boxes(boxes)
 sorted_boxes = sort_boxes(all_boxes)
-
 #print(bottom_up(deepcopy(sorted_boxes))[0])
 
 saved_heights = [-1] * (len(sorted_boxes) + 1)
