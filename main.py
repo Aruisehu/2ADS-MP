@@ -46,17 +46,18 @@ def greedy_method(boxes):
 def naive_recursion(boxes, top_box, height):
     #top_box représente la boite en haut de la pile
     heights = []
-    for box in boxes:
+    start = top_box if top_box != None else 0
+    for i in range(start, len(boxes)):
         for j in range(2):
-            if top_box == None or box < top_box:
-                h = box.get_height()
-                heights.append(naive_recursion(boxes, box, height + h))
-                box.base_rotate()
+            if top_box == None or boxes[i] < boxes[top_box]:
+                h = boxes[i].get_height()
+                heights.append(naive_recursion(boxes, i, height + h))
+            boxes[i].base_rotate()
     return max(heights) if len(heights) != 0 else height
 
 def bottom_up(boxes):
     track = [0] * len(boxes) # Stock height
-    keep = [-1] * len(boxes)
+    keep = [-1] * len(boxes) # Stock boxes under the box at index i
     boxes.reverse()
     for i in range(len(boxes)):
         track[i] = boxes[i].get_height()
@@ -74,14 +75,14 @@ def bottom_up(boxes):
     return max_height, tower
 
 
-boxes = read_box_file("boxes.txt")
-"""boxes = []
+#boxes = read_box_file("boxes.txt")
+boxes = []
 boxes.append(Box([10, 20, 30]))
 boxes.append(Box([5, 10, 50]))
-boxes.append(Box([100, 20, 1]))"""
+boxes.append(Box([100, 20, 1]))
 all_boxes = generate_all_boxes(boxes)
 sorted_boxes = sort_boxes(all_boxes)
 print(bottom_up(deepcopy(sorted_boxes)))
 print(greedy_method(deepcopy(sorted_boxes)))
-#print(naive_recursion(deepcopy(sorted_boxes), None, 0))
+print(naive_recursion(deepcopy(sorted_boxes), None, 0))
 
