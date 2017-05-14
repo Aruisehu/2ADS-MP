@@ -41,7 +41,7 @@ def greedy_method(boxes):
             base = box
             tower.append(box)
             height += box.get_height()
-    return height
+    return height, tower
 
 def naive_recursion(boxes, top_box, height):
     #top_box représente la boite en haut de la pile
@@ -91,15 +91,15 @@ def top_down(boxes, saved_heights, top_box, height):
     return saved_heights[top_box]
 
 boxes = read_box_file("boxes.txt")
-"""boxes = [] # La réponse devrait être 121
-boxes.append(Box([10, 20, 30]))
-boxes.append(Box([5, 10, 50]))
-boxes.append(Box([100, 20, 1]))"""
+#boxes = [] # La réponse devrait être 121
+#boxes.append(Box([10, 20, 30]))
+#boxes.append(Box([5, 10, 50]))
+#boxes.append(Box([100, 20, 1]))
 all_boxes = generate_all_boxes(boxes)
 sorted_boxes = sort_boxes(all_boxes)
 saved_heights = [-1] * (len(sorted_boxes) + 1)
 print(top_down(deepcopy(sorted_boxes), saved_heights, None, 0))
 print(bottom_up(deepcopy(sorted_boxes)))
-#print(greedy_method(deepcopy(sorted_boxes)))
+print(greedy_method(deepcopy(sorted_boxes)))
 
 #print(naive_recursion(deepcopy(sorted_boxes), None, 0))
