@@ -102,4 +102,15 @@ print(top_down(deepcopy(sorted_boxes), saved_heights, None, 0))
 print(bottom_up(deepcopy(sorted_boxes)))
 print(greedy_method(deepcopy(sorted_boxes)))
 
-#print(naive_recursion(deepcopy(sorted_boxes), None, 0))
+boxes1 = [] # La réponse devrait être 121
+boxes1.append(Box([10, 20, 30]))
+boxes1.append(Box([5, 10, 50]))
+boxes1.append(Box([100, 20, 1]))
+
+all_boxes1 = generate_all_boxes(boxes1)
+sorted_boxes1 = sort_boxes(all_boxes1)
+saved_heights1 = [-1] * (len(sorted_boxes) + 1)
+print(top_down(deepcopy(sorted_boxes1), saved_heights1, None, 0))
+print(bottom_up(deepcopy(sorted_boxes1)))
+print(greedy_method(deepcopy(sorted_boxes1)))
+print(naive_recursion(deepcopy(sorted_boxes1), None, 0))
